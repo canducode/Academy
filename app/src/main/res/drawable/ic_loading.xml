@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@color/colorTextTertiary"
+        android:bottom="-1dp"
+        android:left="1dp"
+        android:right="1dp"
+        android:top="1dp" />
+
+    <item
+        android:drawable="@drawable/ic_baseline_refresh_black"
+        android:bottom="10dp"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="10dp" />
+</layer-list>

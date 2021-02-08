@@ -1,6 +1,7 @@
 package com.ngoopy.academy.utils
 
 import android.content.Context
+import android.os.Handler
 import com.ngoopy.academy.data.source.remote.response.ContentResponse
 import com.ngoopy.academy.data.source.remote.response.CourseResponse
 import com.ngoopy.academy.data.source.remote.response.ModuleResponse
@@ -9,6 +10,9 @@ import org.json.JSONObject
 import java.io.IOException
 
 class JsonHelper(private val context: Context) {
+
+    @Suppress("DEPRECATION")
+    private val handler = Handler()
 
     private fun parsingFileToString(fileName: String): String? {
         return try {
@@ -25,24 +29,27 @@ class JsonHelper(private val context: Context) {
 
     fun loadCourses(): List<CourseResponse> {
         val list = ArrayList<CourseResponse>()
-        try {
-            val responseObject = JSONObject(parsingFileToString("CourseResponses.json").toString())
-            val listArray = responseObject.getJSONArray("courses")
-            for (i in 0 until listArray.length()) {
-                val course = listArray.getJSONObject(i)
 
-                val id = course.getString("id")
-                var title = course.getString("title")
-                val description = course.getString("description")
-                val date = course.getString("date")
-                val imagePath = course.getString("imagePath")
+        handler.postDelayed({
+            try {
+                val responseObject = JSONObject(parsingFileToString("CourseResponses.json").toString())
+                val listArray = responseObject.getJSONArray("courses")
+                for (i in 0 until listArray.length()) {
+                    val course = listArray.getJSONObject(i)
 
-                val courseResponse = CourseResponse(id, title, description, date, imagePath)
-                list.add(courseResponse)
+                    val id = course.getString("id")
+                    var title = course.getString("title")
+                    val description = course.getString("description")
+                    val date = course.getString("date")
+                    val imagePath = course.getString("imagePath")
+
+                    val courseResponse = CourseResponse(id, title, description, date, imagePath)
+                    list.add(courseResponse)
+                }
+            } catch (e: JSONException) {
+                e.printStackTrace()
             }
-        } catch (e: JSONException) {
-            e.printStackTrace()
-        }
+        }, 1000)
 
         return list
     }

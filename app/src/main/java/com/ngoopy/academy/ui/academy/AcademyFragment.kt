@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ngoopy.academy.R
 import com.ngoopy.academy.databinding.FragmentAcademyBinding
-import com.ngoopy.academy.utils.DataDummy
 import com.ngoopy.academy.viewmodel.ViewModelFactory
 
 class AcademyFragment : Fragment() {

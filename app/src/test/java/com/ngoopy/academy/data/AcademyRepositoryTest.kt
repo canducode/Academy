@@ -2,22 +2,17 @@ package com.ngoopy.academy.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.ngoopy.academy.data.source.remote.RemoteDataSource
-import com.ngoopy.academy.data.source.remote.response.ContentResponse
-import com.ngoopy.academy.data.source.remote.response.CourseResponse
-import com.ngoopy.academy.data.source.remote.response.ModuleResponse
 import com.ngoopy.academy.utils.DataDummy
 import com.ngoopy.academy.utils.LiveDataTestUtil
-import org.junit.Assert.*
-import org.junit.Test
-import org.mockito.Mockito
-import org.mockito.Mockito.`when`
-
-import org.mockito.Mockito.mock
 import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.doAnswer
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.verify
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotNull
 import org.junit.Rule
+import org.junit.Test
+import org.mockito.Mockito.mock
 
 class AcademyRepositoryTest {
 

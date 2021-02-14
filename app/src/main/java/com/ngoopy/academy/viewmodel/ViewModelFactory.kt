@@ -3,7 +3,7 @@ package com.ngoopy.academy.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ngoopy.academy.data.source.AcademyRepository
+import com.ngoopy.academy.data.AcademyRepository
 import com.ngoopy.academy.di.Injection
 import com.ngoopy.academy.ui.academy.AcademyViewModel
 import com.ngoopy.academy.ui.bookmark.BookmarkViewModel

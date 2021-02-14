@@ -3,7 +3,7 @@ package com.ngoopy.academy.ui.reader.list
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ngoopy.academy.data.ModuleEntity
+import com.ngoopy.academy.data.source.local.entity.ModuleEntity
 import com.ngoopy.academy.databinding.ItemsModuleListCustomBinding
 
 class ModuleListAdapter internal constructor(private val listener: MyAdapterClickListener) : RecyclerView.Adapter<ModuleListAdapter.ModuleViewHolder>(){
@@ -31,8 +31,9 @@ class ModuleListAdapter internal constructor(private val listener: MyAdapterClic
     }
 
     override fun onBindViewHolder(holder: ModuleViewHolder, position: Int) {
-        holder.bind(listModules[position])
-        holder.binding.root.setOnClickListener {
+        val module = listModules[position]
+        holder.bind(module)
+        holder.itemView.setOnClickListener {
             listener.onItemClicked(holder.adapterPosition, listModules[holder.adapterPosition].moduleId)
         }
     }

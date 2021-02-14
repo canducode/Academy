@@ -11,9 +11,6 @@ import java.io.IOException
 
 class JsonHelper(private val context: Context) {
 
-    @Suppress("DEPRECATION")
-    private val handler = Handler()
-
     private fun parsingFileToString(fileName: String): String? {
         return try {
             val `is` = context.assets.open(fileName)
@@ -30,7 +27,6 @@ class JsonHelper(private val context: Context) {
     fun loadCourses(): List<CourseResponse> {
         val list = ArrayList<CourseResponse>()
 
-        handler.postDelayed({
             try {
                 val responseObject = JSONObject(parsingFileToString("CourseResponses.json").toString())
                 val listArray = responseObject.getJSONArray("courses")
@@ -49,7 +45,6 @@ class JsonHelper(private val context: Context) {
             } catch (e: JSONException) {
                 e.printStackTrace()
             }
-        }, 1000)
 
         return list
     }

@@ -3,7 +3,7 @@ package com.ngoopy.academy.ui.detail
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.ngoopy.academy.data.ModuleEntity
+import com.ngoopy.academy.data.source.local.entity.ModuleEntity
 import com.ngoopy.academy.databinding.ItemsModuleListBinding
 
 class DetailCourseAdapter : RecyclerView.Adapter<DetailCourseAdapter.ModuleViewHolder>() {

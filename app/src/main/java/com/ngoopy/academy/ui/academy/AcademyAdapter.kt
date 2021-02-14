@@ -3,24 +3,30 @@ package com.ngoopy.academy.ui.academy
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.ngoopy.academy.R
-import com.ngoopy.academy.data.CourseEntity
+import com.ngoopy.academy.data.source.local.entity.CourseEntity
 import com.ngoopy.academy.databinding.ItemsAcademyBinding
 import com.ngoopy.academy.ui.detail.DetailCourseActivity
 
-class AcademyAdapter : RecyclerView.Adapter<AcademyAdapter.AcademyHolder>() {
-    private var listCourses = ArrayList<CourseEntity>()
+class AcademyAdapter : PagedListAdapter<CourseEntity, AcademyAdapter.CourseViewHolder>(DIFF_CALLBACK) {
+    companion object {
+        private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CourseEntity>() {
+            override fun areItemsTheSame(oldItem: CourseEntity, newItem: CourseEntity): Boolean {
+                return oldItem.courseId == newItem.courseId
+            }
 
-    fun setCourses(courses: List<CourseEntity>?) {
-        if (courses == null) return
-        listCourses.clear()
-        listCourses.addAll(courses)
+            override fun areContentsTheSame(oldItem: CourseEntity, newItem: CourseEntity): Boolean {
+                return oldItem == newItem
+            }
+        }
     }
 
-    class AcademyHolder(val binding: ItemsAcademyBinding) : RecyclerView.ViewHolder(binding.root) {
+    class CourseViewHolder(val binding: ItemsAcademyBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(course: CourseEntity) {
             with(binding) {
                 tvItemTitle.text = course.title
@@ -41,14 +47,15 @@ class AcademyAdapter : RecyclerView.Adapter<AcademyAdapter.AcademyHolder>() {
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AcademyHolder {
-        val viewBind = ItemsAcademyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AcademyHolder(viewBind)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CourseViewHolder {
+        val binding = ItemsAcademyBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return CourseViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: AcademyHolder, position: Int) {
-        holder.bind(listCourses[position])
+    override fun onBindViewHolder(holder: CourseViewHolder, position: Int) {
+        val course = getItem(position)
+        if (course != null) {
+            holder.bind(course)
+        }
     }
-
-    override fun getItemCount(): Int = listCourses.size
 }

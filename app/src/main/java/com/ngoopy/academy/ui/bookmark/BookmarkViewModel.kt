@@ -2,9 +2,15 @@ package com.ngoopy.academy.ui.bookmark
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.ngoopy.academy.data.CourseEntity
-import com.ngoopy.academy.data.source.AcademyRepository
+import androidx.paging.PagedList
+import com.ngoopy.academy.data.source.local.entity.CourseEntity
+import com.ngoopy.academy.data.AcademyRepository
 
 class BookmarkViewModel(private val academyRepository: AcademyRepository) : ViewModel() {
-    fun getBookmark(): LiveData<List<CourseEntity>> = academyRepository.getBookmarkedCourses()
+    fun getBookmark(): LiveData<PagedList<CourseEntity>> = academyRepository.getBookmarkedCourses()
+
+    fun setBookmark(courseEntity: CourseEntity) {
+        val newState = !courseEntity.bookmarked
+        academyRepository.setCourseBookmark(courseEntity, newState)
+    }
 }

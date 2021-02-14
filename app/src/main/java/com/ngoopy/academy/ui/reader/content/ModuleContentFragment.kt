@@ -5,13 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
-import com.ngoopy.academy.data.ModuleEntity
+import com.ngoopy.academy.data.source.local.entity.ModuleEntity
 import com.ngoopy.academy.databinding.FragmentModuleContentBinding
 import com.ngoopy.academy.ui.reader.CourseReaderViewModel
 import com.ngoopy.academy.viewmodel.ViewModelFactory
+import com.ngoopy.academy.vo.Status
 
 class ModuleContentFragment : Fragment() {
+    private lateinit var viewModel: CourseReaderViewModel
     private var _binding: FragmentModuleContentBinding? = null
     private val binding get() = _binding!!
 
@@ -32,13 +35,29 @@ class ModuleContentFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
             val factory = ViewModelFactory.getInstance(requireActivity())
-            val viewModel = ViewModelProvider(requireActivity(), factory)[CourseReaderViewModel::class.java]
+            viewModel = ViewModelProvider(requireActivity(), factory)[CourseReaderViewModel::class.java]
 
-            binding.progressBar.visibility = View.VISIBLE
-            viewModel.getSelectedModule().observe(viewLifecycleOwner, { module ->
-                binding.progressBar.visibility = View.GONE
-                if (module != null) {
-                    populateWebView(module)
+            viewModel.selectedModule.observe(viewLifecycleOwner, { moduleEntity ->
+                if (moduleEntity != null) {
+                    when (moduleEntity.status) {
+                        Status.LOADING -> binding.progressBar.visibility = View.VISIBLE
+                        Status.SUCCESS -> if (moduleEntity.data != null) {
+                            binding.progressBar.visibility = View.GONE
+                            if (moduleEntity.data.contentEntity != null) {
+                                populateWebView(moduleEntity.data)
+                            }
+                            setButtonNextPrevState(moduleEntity.data)
+                            if (!moduleEntity.data.read) {
+                                viewModel.readContent(moduleEntity.data)
+                            }
+                        }
+                        Status.ERROR -> {
+                            binding.progressBar.visibility = View.GONE
+                            Toast.makeText(context, "Terjadi kesalahan", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    binding.btnNext.setOnClickListener { viewModel.setNextPage() }
+                    binding.btnPrev.setOnClickListener { viewModel.setPrefPage() }
                 }
             })
         }
@@ -51,5 +70,24 @@ class ModuleContentFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    private fun setButtonNextPrevState(module: ModuleEntity) {
+        if (activity != null) {
+            when (module.position) {
+                0 -> {
+                    binding.btnPrev.isEnabled = false
+                    binding.btnNext.isEnabled = true
+                }
+                viewModel.getModuleSize() - 1 -> {
+                    binding.btnPrev.isEnabled = true
+                    binding.btnNext.isEnabled = false
+                }
+                else -> {
+                    binding.btnPrev.isEnabled = true
+                    binding.btnNext.isEnabled = true
+                }
+            }
+        }
     }
 }
